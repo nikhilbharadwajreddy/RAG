@@ -23,7 +23,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Pre-cleanup: Delete SSM parameters if they already exist
+      - name:  Delete SSM parameters if they already exist
         run: |
           PARAMS=("openai_api_key" "pinecone_api_key" "pinecone_index_host" "slack_bot_token")
 
@@ -38,7 +38,7 @@ jobs:
               echo "No existing parameter found for $param"
             fi
           done
-          
+
       - name: Package Lambda function
         run: |
           # Install dependencies
