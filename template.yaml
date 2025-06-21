@@ -45,7 +45,7 @@ Resources:
 
   PineconeHost:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
+    DeletionPolicy: Delete #del
     UpdateReplacePolicy: Delete
     Properties:
       Name: pinecone_index_host
