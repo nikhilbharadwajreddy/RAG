@@ -4,10 +4,7 @@ from pinecone import Pinecone
 # from query_vectordb import query_pinecone
 # from rag_answer_generator import generate_rag_answer
 
-openai_api_key = "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"
-pinecone_api_key= "pcsk_3TMqK3_4ZFsMN38GW4tXVWmY4S5ZiwJWFCbX1h9kkAcQ2TB69RSwieWkqtw3gin79PQgPi"
 
-index_host = "https://rag-1k2hyay.svc.aped-4627-b74a.pinecone.io"
 
 def query_pinecone(pinecone_api_key, openai_api_key, index_host, question,
                    namespace="default", model="text-embedding-ada-002", top_k=5):

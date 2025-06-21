@@ -1,6 +1,5 @@
 from openai import OpenAI
 
-key = "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"
 
 
 def generate_rag_answer( question, context_chunks, model="gpt-4"):
