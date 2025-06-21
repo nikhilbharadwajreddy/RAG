@@ -97,7 +97,7 @@ def lambda_handler(event, context):
 
         return {
             "statusCode": 200,
-            "body": answer  # Just return plain text for chatbot
+            "body": answer  
         }
 
     except Exception as e:
