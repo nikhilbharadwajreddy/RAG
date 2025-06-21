@@ -29,7 +29,7 @@ Resources:
     Type: AWS::SSM::Parameter
     Properties:
       Name: openai_api_key
-      Type: SecureString
+      Type: String
       Value: !Ref OpenAIApiKey
 
   PineconeKey:
@@ -43,14 +43,14 @@ Resources:
     Type: AWS::SSM::Parameter
     Properties:
       Name: pinecone_index_host
-      Type: SecureString
+      Type: String
       Value: !Ref PineconeIndexHost
 
   SlackToken:
     Type: AWS::SSM::Parameter
     Properties:
       Name: slack_bot_token
-      Type: SecureString
+      Type: String
       Value: !Ref SlackBotToken
 
   # Lambda Function
