@@ -76,42 +76,6 @@ Resources:
         S3Key: lambda/rag.zip 
 
 
-  UploadLambda:
-    Type: AWS::Lambda::Function
-    Properties:
-      FunctionName: rag-process-upload
-      Role:  arn:aws:iam::783764612303:role/Insta_lambda_handler 
-      Handler: main.lambda_handler
-      Runtime: python3.9
-      MemorySize: 1024
-      Timeout: 60
-      Code:
-        S3Bucket: nikhilragdata 
-        S3Key: lambda/rag.zip 
-
-  LambdaPermissionForS3:
-    Type: AWS::Lambda::Permission
-    Properties:
-      FunctionName: !Ref UploadLambda
-      Action: lambda:InvokeFunction
-      Principal: s3.amazonaws.com
-      SourceArn: !Sub arn:aws:s3:::nikhilbragdata
-
-  S3UploadTrigger:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: nikhilbragdata
-      NotificationConfiguration:
-        LambdaConfigurations:
-          - Event: s3:ObjectCreated:Put
-            Function: !GetAtt RAGLambda.Arn
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: uploads/
-
-
   # API Gateway
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
