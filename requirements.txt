@@ -1,6 +1,5 @@
 langchain==0.1.17
 pinecone-client==3.0.3
-boto3==1.34.34
 PyMuPDF==1.23.14
 python-docx==0.8.11
 mammoth==1.6.0
