@@ -48,6 +48,21 @@ jobs:
           
           # Create zip file
           zip -r rag.zip . -x "*.git*" "*.github*" "template.yaml" "README.md"
+      
+      - name: Check ZIP file size
+        run: |
+          ZIP_FILE="rag.zip"
+          SIZE=$(stat -c%s "$ZIP_FILE")
+          SIZE_MB=$(echo "scale=2; $SIZE/1024/1024" | bc)
+          echo "📦 Lambda ZIP size: $SIZE bytes (~${SIZE_MB} MB)"
+
+          # Optional: fail if too large
+          if [ "$SIZE" -ge 262144000 ]; then
+            echo "❌ ZIP size exceeds 250MB Lambda limit."
+            exit 1
+          fi
+
+      
 
       - name: Upload to S3
         run: |
