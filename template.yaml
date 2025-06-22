@@ -83,7 +83,7 @@ Resources:
       Role:  arn:aws:iam::783764612303:role/Insta_lambda_handler 
       Handler: main.lambda_handler
       Runtime: python3.9
-       MemorySize: 1024
+      MemorySize: 1024
       Timeout: 60
       Code:
         S3Bucket: nikhilragdata 
