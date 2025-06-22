@@ -7,12 +7,6 @@ chunks = chunk_document("/Users/bharadwajreddy/Desktop/resumes/aii/Nikhil Sagili
 
 
 
-# # Replace with your actual values
-# api_key = "pcsk_7DHuPe_6vdFZMwGQBkNFyYJ2iWc5jvUB9Ck9jitrKJAa3DLiJtYj4Ecn4F7raaH4LzJ7D6"  # your Pinecone API key
-# index_host = "https://rag-1k2hyay.svc.aped-4627-b74a.pinecone.io"
-# index_name = "rag"
-# namespace = ""  # Set to "" for default, or provide a namespace if used
-
 # from pinecone import Pinecone
 
 
