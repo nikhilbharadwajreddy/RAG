@@ -21,17 +21,20 @@ def chunk_pdf_with_metadata(file_path, doc_id="default_doc", batch_size=20):
     for i in range(0, total_pages, batch_size):
         batch_text = ""
         page_start = i
-        page_end = min(i + batch_size, total_pages) - 1  # avoid overflow
+        page_end = min(i + batch_size, total_pages) - 1
 
-        for j, page in enumerate(doc[i:i+batch_size]):
+        for j in range(i, min(i + batch_size, total_pages)):
+            page = doc[j]
             page_text = page.get_text()
             batch_text += page_text + "\n"
+
+        if not batch_text.strip():
+            continue
 
         chunks = text_splitter.split_text(batch_text)
 
         for idx, chunk_text in enumerate(chunks):
-            token_count = len(enc.encode(chunk_text))  # precise token count
-
+            token_count = len(enc.encode(chunk_text))
             chunk_metadata.append({
                 "chunk": chunk_text,
                 "metadata": {
@@ -43,9 +46,5 @@ def chunk_pdf_with_metadata(file_path, doc_id="default_doc", batch_size=20):
                     "tokens_estimate": token_count
                 }
             })
-
             chunk_counter += 1
-
     return chunk_metadata
-
-
