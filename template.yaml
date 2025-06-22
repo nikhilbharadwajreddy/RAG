@@ -75,6 +75,7 @@ Resources:
         S3Bucket: nikhilragdata             
         S3Key: lambda/rag.zip 
 
+
   # API Gateway
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
