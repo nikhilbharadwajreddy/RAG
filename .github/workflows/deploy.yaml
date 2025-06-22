@@ -23,21 +23,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name:  Delete SSM parameters if they already exist
+      - name: Delete SSM parameters if they already exist
         run: |
+          echo "🔍 Verifying AWS access..."
+          aws sts get-caller-identity
+
           PARAMS=("openai_api_key" "pinecone_api_key" "pinecone_index_host" "slack_bot_token")
 
           for param in "${PARAMS[@]}"; do
-            echo "Checking for $param..."
-            aws ssm get-parameter --name "$param" >/dev/null 2>&1
-
-            if [ $? -eq 0 ]; then
-              echo "Deleting existing parameter: $param"
-              aws ssm delete-parameter --name "$param"
+            echo "🔎 Checking for $param in us-east-1..."
+            if aws ssm get-parameter --region us-east-1 --name "$param" >/dev/null 2>&1; then
+              echo "🧹 Deleting $param"
+              aws ssm delete-parameter --region us-east-1 --name "$param"
             else
-              echo "No existing parameter found for $param"
+              echo "✅ Not found or no access: $param"
             fi
           done
+
 
       - name: Package Lambda function
         run: |
