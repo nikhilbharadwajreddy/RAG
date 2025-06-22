@@ -6,6 +6,6 @@ python-docx==0.8.11
 mammoth==1.6.0
 tiktoken==0.5.2
 requests==2.31.0
-numpy==1.24.3
-scipy==1.10.1
+# numpy==1.24.3
+# scipy==1.10.1
 typing-extensions==4.5.0
