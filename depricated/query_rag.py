@@ -67,32 +67,3 @@ Answer:"""
     )
 
     return completion.choices[0].message.content.strip()
-
-
-# ✅ Example Usage
-if __name__ == "__main__":
-
-    question = "what does The MCS analysis shows reductions in non-CO2 emissions by 2050?"
-
-    # Step 1: Retrieve relevant chunks
-    retrieved_chunks = query_pinecone(
-        pinecone_api_key=pinecone_api_key,
-        openai_api_key=openai_api_key,
-        index_host=index_host,
-        question=question
-    )
-
-    # Print debug info
-    print("📄 Retrieved Chunk Numbers:")
-    for r in retrieved_chunks:
-        print(r["metadata"].get("chunk_number"))
-
-    # Step 2: Generate RAG answer
-    answer = generate_rag_answer(
-        question=question,
-        openai_api_key=openai_api_key,
-        context_chunks=retrieved_chunks
-    )
-
-    print("\n🧠 Final Answer:")
-    print(answer)
