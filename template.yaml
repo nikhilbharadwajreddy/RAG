@@ -95,12 +95,12 @@ Resources:
       FunctionName: !Ref UploadLambda
       Action: lambda:InvokeFunction
       Principal: s3.amazonaws.com
-      SourceArn: !Sub arn:aws:s3:::nikhilragdata
+      SourceArn: !Sub arn:aws:s3:::nikhilbragdata
 
   S3UploadTrigger:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: nikhilragdata
+      BucketName: nikhilbragdata
       NotificationConfiguration:
         LambdaConfigurations:
           - Event: s3:ObjectCreated:Put
