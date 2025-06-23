@@ -11,5 +11,5 @@ def save_embeddings_to_jsonl(embedded_chunks, doc_id, output_dir="."):
             f.write("\n")
     
 
-    print(f"✅ Saved {len(embedded_chunks)} embeddings to {output_path}")
+    print(f"Saved {len(embedded_chunks)} embeddings to {output_path}")
     return output_path

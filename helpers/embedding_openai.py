@@ -36,3 +36,4 @@ def embed_chunks_with_openai(chunks, api_key, batch_size=20, model="text-embeddi
             })
 
     return embedded_chunks
+
