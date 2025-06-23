@@ -54,7 +54,7 @@ def generate_rag_answer(question, openai_api_key, context_chunks, model="gpt-4")
     context = "\n\n".join([f"{i+1}. {chunk['chunk']}" for i, chunk in enumerate(context_chunks)])
 
     prompt = f"""You are a helpful assistant. Use the context below to answer the question along with chunk id in the context from where you got the answer.
-If the answer is not contained in the context, say then answer on your own
+If the answer is not contained in the context, say then answer on your own no problem and make the answer looks bit funny
 
 Context:
 {context}
@@ -135,3 +135,5 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": f"Internal error: {str(e)}"
         }
+
+
