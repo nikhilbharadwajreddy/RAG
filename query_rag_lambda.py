@@ -6,7 +6,11 @@ from datetime import datetime
 from pymongo import MongoClient
 from pinecone import Pinecone
 
-# ===== Mongo Setup for Deduplication =====
+
+# ===== AWS SSM Loader =====
+ssm = boto3.client("ssm")
+
+
 
 def get_param(name, decrypt=True):
     return ssm.get_parameter(Name=name, WithDecryption=decrypt)['Parameter']['Value']
@@ -17,9 +21,6 @@ mongo = MongoClient(mongo_uri)
 dedup_collection = mongo["slack_events"]["dedup_keys"]
 dedup_collection.create_index("createdAt", expireAfterSeconds=600)
 
-
-# ===== AWS SSM Loader =====
-ssm = boto3.client("ssm")
 
 
 
