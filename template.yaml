@@ -36,8 +36,8 @@ Parameters:
 Resources:
   OpenAIKey:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Name: openai_api_key
       Type: String
@@ -46,8 +46,8 @@ Resources:
   
   MongoDBURI:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Name: mongo_uri
       Type: String
@@ -56,8 +56,8 @@ Resources:
 
   PineconeKey:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Name: pinecone_api_key
       Type: String
@@ -66,8 +66,8 @@ Resources:
 
   PineconeHost:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Name: pinecone_index_host
       Type: String
@@ -76,8 +76,8 @@ Resources:
 
   SlackToken:
     Type: AWS::SSM::Parameter
-    DeletionPolicy: Delete
-    UpdateReplacePolicy: Delete
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
     Properties:
       Name: slack_bot_token
       Type: String

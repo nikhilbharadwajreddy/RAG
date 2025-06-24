@@ -72,7 +72,7 @@ jobs:
               PineconeIndexHost="${{ secrets.PINECONE_INDEX_HOST }}" \
               SlackBotToken="${{ secrets.SLACK_BOT_TOKEN }}" \
               MongoURI="${{ secrets.MONGO_URI }}" \
-              Version="v3" \
+              Version="v4" \
             --no-fail-on-empty-changeset
 
       - name: Get API Gateway URL
