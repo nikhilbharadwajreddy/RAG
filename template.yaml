@@ -5,33 +5,33 @@ Description: 'RAG Chatbot Lambda with existing IAM role'
 Parameters:
   Version:
     Type: String
-    Default: "v1"
+    Default: "v3"
     Description: "Version to force CloudFormation to update SSM Parameters"
 
   OpenAIApiKey:
     Type: String
     NoEcho: true
-    Description: 'OpenAI API Key'
+    Description: 'OpenAI API Key '
   
   PineconeApiKey:
     Type: String
     NoEcho: true
-    Description: 'Pinecone API Key'
+    Description: 'Pinecone API Key '
   
   PineconeIndexHost:
     Type: String
     NoEcho: true
-    Description: 'Pinecone Index Host'
+    Description: 'Pinecone Index Host '
   
   SlackBotToken:
     Type: String
     NoEcho: true
-    Description: 'Slack Bot Token'
+    Description: 'Slack Bot Token '
   
   MongoURI:
     Type: String
     NoEcho: true
-    Description: 'Mongo URI'
+    Description: 'Mongo URI '
 
 Resources:
   OpenAIKey:
