@@ -27,6 +27,11 @@ Parameters:
     Type: String
     NoEcho: true
     Description: 'Slack Bot Token'
+  
+  MongoURI:
+    Type: String
+    NoEcho: true
+    Description: 'MongoURI'
 
 Resources:
   OpenAIKey:
@@ -38,6 +43,16 @@ Resources:
       Type: String
       Value: !Ref OpenAIApiKey
       Description: !Sub "OpenAI API Key (Updated ${Version})"
+  
+  MongoDBURI:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: mongo_uri
+      Type: String
+      Value: !Ref MongoURI
+      Description: !Sub "MongoDB Key (Updated ${Version})"
 
   PineconeKey:
     Type: AWS::SSM::Parameter
