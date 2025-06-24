@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload and Process File</title>
+</head>
+<body>
+    <h2>Select a file to process:</h2>
+
+    <!-- File Upload Form -->
+    <form action="/run-script" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload & Process</button>
+    </form>
+
+    {% if upload_message %}
+        <pre><strong>{{ upload_message }}</strong></pre>
+    {% endif %}
+
+    <h3>Delete the Existing Data:</h3>
+
+    <!-- Button to trigger another script -->
+    <form action="/run-secondary-script" method="post">
+        <button type="submit">Delete Data</button>
+    </form>
+
+    {% if delete_message %}
+        <pre><strong>{{ delete_message }}</strong></pre>
+    {% endif %}
+</body>
+</html>
