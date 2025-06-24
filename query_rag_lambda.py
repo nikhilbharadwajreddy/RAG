@@ -1,17 +1,30 @@
-import json             
-import boto3           
-import requests       
-from pinecone import Pinecone  
+import json
+import os
+import boto3
+import requests
+from datetime import datetime
+from pymongo import MongoClient
+from pinecone import Pinecone
 
-# ===== SSM Parameter Store Loader =====
-ssm = boto3.client("ssm")
+# ===== Mongo Setup for Deduplication =====
 
 def get_param(name, decrypt=True):
     return ssm.get_parameter(Name=name, WithDecryption=decrypt)['Parameter']['Value']
 
-# ===== Query Pinecone after embedding the question =====
+mongo_uri = get_param("mongo_uri", decrypt=True)
+
+mongo = MongoClient(mongo_uri)
+dedup_collection = mongo["slack_events"]["dedup_keys"]
+dedup_collection.create_index("createdAt", expireAfterSeconds=600)
+
+
+# ===== AWS SSM Loader =====
+ssm = boto3.client("ssm")
+
+
+
+# ===== Pinecone Query Logic =====
 def query_pinecone(pinecone_api_key, openai_api_key, index_host, question, namespace="default", top_k=5):
-    # Step 1: Get embedding from OpenAI
     headers = {
         "Authorization": f"Bearer {openai_api_key}",
         "Content-Type": "application/json"
@@ -25,18 +38,10 @@ def query_pinecone(pinecone_api_key, openai_api_key, index_host, question, names
     response = requests.post(embedding_url, headers=headers, json=embed_payload)
     embedding = response.json()['data'][0]['embedding']
 
-    # Step 2: Query Pinecone
     pc = Pinecone(api_key=pinecone_api_key)
     index = pc.Index(host=index_host)
+    search_results = index.query(vector=embedding, top_k=top_k, include_metadata=True, namespace=namespace)
 
-    search_results = index.query(
-        vector=embedding,
-        top_k=top_k,
-        include_metadata=True,
-        namespace=namespace
-    )
-
-    # Step 3: Format results
     results = []
     for match in search_results["matches"]:
         metadata = match["metadata"]
@@ -49,7 +54,7 @@ def query_pinecone(pinecone_api_key, openai_api_key, index_host, question, names
 
     return results
 
-# ===== Generate RAG answer using OpenAI chat completion =====
+# ===== Generate RAG Answer from OpenAI Chat =====
 def generate_rag_answer(question, openai_api_key, context_chunks, model="gpt-4"):
     context = "\n\n".join([f"{i+1}. {chunk['chunk']}" for i, chunk in enumerate(context_chunks)])
 
@@ -76,8 +81,7 @@ Answer:"""
     }
 
     response = requests.post(chat_url, headers=headers, json=payload)
-    result = response.json()
-    return result['choices'][0]['message']['content'].strip()
+    return response.json()['choices'][0]['message']['content'].strip()
 
 def post_message_to_slack(bot_token, channel, text):
     headers = {
@@ -90,44 +94,42 @@ def post_message_to_slack(bot_token, channel, text):
     }
     requests.post("https://slack.com/api/chat.postMessage", headers=headers, json=payload)
 
-
-# ===== AWS Lambda Entry Point =====
+# ===== Lambda Entry Point =====
 def lambda_handler(event, context):
     try:
         body = json.loads(event.get("body", "{}"))
 
-        # Slack URL Verification challenge
         if body.get("type") == "url_verification":
             return {
                 "statusCode": 200,
                 "body": body.get("challenge")
             }
 
-        # Extract user message
+        event_id = body.get("event_id")
         event_data = body.get("event", {})
         user_text = event_data.get("text", "").strip()
+        channel = event_data.get("channel")
 
-        if not user_text:
-            return {"statusCode": 200, "body": "No text to process."}
+        if event_id and dedup_collection.find_one({"_id": event_id}):
+            print(f"Duplicate event {event_id} — skipping.")
+            return {"statusCode": 200, "body": "Duplicate event ignored"}
 
-        # Pull secrets from SSM
-        openai_key = get_param("openai_api_key", decrypt=True)
-        pinecone_key = get_param("pinecone_api_key", decrypt=False)
-        index_host = get_param("pinecone_index_host", decrypt=True)
-        slack_token = get_param("slack_bot_token", decrypt=True)  # store as SSM secret
+        if event_id:
+            dedup_collection.insert_one({"_id": event_id, "createdAt": datetime.utcnow()})
 
-        # Generate RAG answer
-        chunks = query_pinecone(pinecone_key, openai_key, index_host, user_text)
-        answer = generate_rag_answer(user_text, openai_key, chunks)
+        response = {"statusCode": 200, "body": "OK"}
 
-        # Post answer back to Slack
-        channel = event_data["channel"]
-        post_message_to_slack(slack_token, channel, answer)
+        if user_text:
+            openai_key = get_param("openai_api_key", decrypt=True)
+            pinecone_key = get_param("pinecone_api_key", decrypt=False)
+            index_host = get_param("pinecone_index_host", decrypt=True)
+            slack_token = get_param("slack_bot_token", decrypt=True)
+            chunks = query_pinecone(pinecone_key, openai_key, index_host, user_text)
+            answer = generate_rag_answer(user_text, openai_key, chunks)
 
-        return {
-            "statusCode": 200,
-            "body": answer
-        }
+            post_message_to_slack(slack_token, channel, answer)
+
+        return response
 
     except Exception as e:
         print("Error:", str(e))
@@ -135,5 +137,3 @@ def lambda_handler(event, context):
             "statusCode": 500,
             "body": f"Internal error: {str(e)}"
         }
-
-

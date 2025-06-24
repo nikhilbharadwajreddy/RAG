@@ -5,7 +5,7 @@ Description: 'RAG Chatbot Lambda with existing IAM role'
 Parameters:
   Version:
     Type: String
-    Default: "v1"
+    Default: "v2"
     Description: "Version to force CloudFormation to update SSM Parameters"
 
   OpenAIApiKey:
@@ -27,6 +27,11 @@ Parameters:
     Type: String
     NoEcho: true
     Description: 'Slack Bot Token'
+  
+  MongoURI:
+    Type: String
+    NoEcho: true
+    Description: 'Mongo URI'
 
 Resources:
   OpenAIKey:
@@ -68,6 +73,16 @@ Resources:
       Type: String
       Value: !Ref SlackBotToken
       Description: !Sub "Slack Bot Token (Updated ${Version})"
+  
+    MongoURI:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: mongo_uri
+      Type: String
+      Value: !Ref MongoURI
+      Description: !Sub "Mongo URI (Updated ${Version})"
 
 
   # Lambda Function

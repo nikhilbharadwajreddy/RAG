@@ -88,6 +88,7 @@ jobs:
               PineconeApiKey="${{ secrets.PINECONE_API_KEY }}" \
               PineconeIndexHost="${{ secrets.PINECONE_INDEX_HOST }}" \
               SlackBotToken="${{ secrets.SLACK_BOT_TOKEN }}" \
+              MongoURI="${{ secrets.MONGO_URI }}" \
               Version="v1" \
             --no-fail-on-empty-changeset
 
