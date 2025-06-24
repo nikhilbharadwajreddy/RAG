@@ -100,5 +100,3 @@ jobs:
           echo "API Gateway URL: $API_URL"
           echo "API_URL=$API_URL" >> $GITHUB_ENV
           echo "::notice title=Deployed API::$API_URL"
-
-          
