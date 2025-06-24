@@ -36,7 +36,7 @@ jobs:
               echo "🧹 Deleting $param"
               aws ssm delete-parameter --region us-east-1 --name "$param"
             else
-              echo "✅ Not found or no access: $param"
+              echo "Not found or no access: $param"
             fi
           done
 
@@ -58,7 +58,7 @@ jobs:
 
           # Optional: fail if too large
           if [ "$SIZE" -ge 262144000 ]; then
-            echo "❌ ZIP size exceeds 250MB Lambda limit."
+            echo "ZIP size exceeds 250MB Lambda limit."
             exit 1
           fi
       
@@ -68,7 +68,7 @@ jobs:
           DIR_SIZE_MB=$(echo "scale=2; $DIR_SIZE/1024/1024" | bc)
           echo "🗂️ Unzipped folder size: $DIR_SIZE bytes (~${DIR_SIZE_MB} MB)"
           if [ "$DIR_SIZE" -ge 262144000 ]; then
-            echo "❌ Unzipped size exceeds 250MB Lambda limit."
+            echo "Unzipped size exceeds 250MB Lambda limit."
             exit 1
           fi
 
