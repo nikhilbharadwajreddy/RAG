@@ -74,7 +74,7 @@ Resources:
       Value: !Ref SlackBotToken
       Description: !Sub "Slack Bot Token (Updated ${Version})"
   
-    MongoURI:
+  MongoURI:
     Type: AWS::SSM::Parameter
     DeletionPolicy: Delete
     UpdateReplacePolicy: Delete
