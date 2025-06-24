@@ -5,7 +5,7 @@ Description: 'RAG Chatbot Lambda with existing IAM role'
 Parameters:
   Version:
     Type: String
-    Default: "v3"
+    Default: "v2"
     Description: "Version to force CloudFormation to update SSM Parameters"
 
   OpenAIApiKey:
