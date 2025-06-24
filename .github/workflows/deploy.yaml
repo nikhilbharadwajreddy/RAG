@@ -23,24 +23,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Delete SSM parameters if they already exist
-        run: |
-          echo "🔍 Verifying AWS access..."
-          aws sts get-caller-identity
-
-          PARAMS=("openai_api_key" "pinecone_api_key" "pinecone_index_host" "slack_bot_token")
-
-          for param in "${PARAMS[@]}"; do
-            echo "🔎 Checking for $param in us-east-1..."
-            if aws ssm get-parameter --region us-east-1 --name "$param" >/dev/null 2>&1; then
-              echo "🧹 Deleting $param"
-              aws ssm delete-parameter --region us-east-1 --name "$param"
-            else
-              echo "Not found or no access: $param"
-            fi
-          done
-
-
       - name: Package Lambda function
         run: |
           # Install dependencies
@@ -83,13 +65,6 @@ jobs:
             --template-file template.yaml \
             --stack-name rag-slack-chatbot \
             --capabilities CAPABILITY_NAMED_IAM \
-            --parameter-overrides \
-              OpenAIApiKey="${{ secrets.OPENAI_API_KEY }}" \
-              PineconeApiKey="${{ secrets.PINECONE_API_KEY }}" \
-              PineconeIndexHost="${{ secrets.PINECONE_INDEX_HOST }}" \
-              SlackBotToken="${{ secrets.SLACK_BOT_TOKEN }}" \
-              MongoURI="${{ secrets.MONGO_URI }}" \
-              Version="v3" \
             --no-fail-on-empty-changeset
 
       - name: Get API Gateway URL
