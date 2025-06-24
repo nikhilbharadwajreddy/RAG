@@ -2,7 +2,73 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'RAG Chatbot Lambda with existing IAM role'
 
 
+Parameters:
+  Version:
+    Type: String
+    Default: "v1"
+    Description: "Version to force CloudFormation to update SSM Parameters"
+
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: 'OpenAI API Key'
+  
+  PineconeApiKey:
+    Type: String
+    NoEcho: true
+    Description: 'Pinecone API Key'
+  
+  PineconeIndexHost:
+    Type: String
+    NoEcho: true
+    Description: 'Pinecone Index Host'
+  
+  SlackBotToken:
+    Type: String
+    NoEcho: true
+    Description: 'Slack Bot Token'
+
 Resources:
+  OpenAIKey:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: openai_api_key
+      Type: String
+      Value: !Ref OpenAIApiKey
+      Description: !Sub "OpenAI API Key (Updated ${Version})"
+
+  PineconeKey:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: pinecone_api_key
+      Type: String
+      Value: !Ref PineconeApiKey
+      Description: !Sub "Pinecone API Key (Updated ${Version})"
+
+  PineconeHost:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: pinecone_index_host
+      Type: String
+      Value: !Ref PineconeIndexHost
+      Description: !Sub "Pinecone Index Host (Updated ${Version})"
+
+  SlackToken:
+    Type: AWS::SSM::Parameter
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Delete
+    Properties:
+      Name: slack_bot_token
+      Type: String
+      Value: !Ref SlackBotToken
+      Description: !Sub "Slack Bot Token (Updated ${Version})"
+
   # Lambda Function
   RAGLambda:
     Type: AWS::Lambda::Function
