@@ -69,22 +69,6 @@ Resources:
       Value: !Ref SlackBotToken
       Description: !Sub "Slack Bot Token (Updated ${Version})"
 
-Outputs:
-  OpenAIKeyOutput:
-    Description: "OpenAI SSM Parameter Name"
-    Value: !Ref OpenAIKey
-
-  PineconeKeyOutput:
-    Description: "Pinecone SSM Parameter Name"
-    Value: !Ref PineconeKey
-
-  PineconeHostOutput:
-    Description: "Pinecone Host SSM Parameter Name"
-    Value: !Ref PineconeHost
-
-  SlackTokenOutput:
-    Description: "Slack Token SSM Parameter Name"
-    Value: !Ref SlackToken
 
   # Lambda Function
   RAGLambda:
