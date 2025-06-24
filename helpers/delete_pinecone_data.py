@@ -15,7 +15,7 @@ def delete_all_vectors(namespace="default"):
     pc = Pinecone(api_key=pinecone_api_key)
     index = pc.Index(host=index_host)
 
-    print(f"🧹 Deleting all vectors in namespace '{namespace}'...")
+    print(f" Deleting all vectors in namespace '{namespace}'...")
     index.delete(delete_all=True, namespace=namespace)
     print("Deletion complete.")
 
